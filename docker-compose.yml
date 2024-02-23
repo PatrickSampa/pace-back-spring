@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  app:
+    container_name: pace
+    restart: always
+    image: patricksampa/back-spring-pace:1.0.0
+    depends_on:
+      - pace_database
+    environment:
+      - spring.datasource.url=jdbc:postgresql://pace_database:5432/pace
+      - spring.datasource.username=pace
+      - spring.datasource.password=pace
+      - spring.jpa.hibernate.ddl-auto=update
+    ports:
+      - 8080:8080
+  pace_database:
+    container_name: pace-database
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: pace
+      POSTGRES_USER: pace
+      POSTGRES_PASSWORD: pace
+    ports:
+    - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/pace
+  
+
+volumes:
+  db_data:
+    driver: local
